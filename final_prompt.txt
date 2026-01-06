@@ -1,0 +1,156 @@
+# Final Prompt: Bug Fix Project Implementation & Validation
+
+## Role & Objective
+
+You are a senior software engineer tasked with fixing a buggy Python web scraper project and then executing comprehensive validation to confirm the fix is complete and functional.
+
+## Input & Context
+
+**Source:** Bug fix assignment for a Python project with JSON parsing issues.
+
+**Project Details:**
+- Original buggy project location: `issue_project/`
+- Bug symptom: 5 of 14 tests fail; application crashes with `JSONDecodeError` when servers return HTML error pages or plain text instead of JSON
+- Target: Create a fixed version at `issue_project_fixed/` with all tests passing
+
+## Step-by-Step Instructions
+
+### Phase 1: Analyze and Fix the Project
+
+**Step 1.1: Analyze the Failing Tests**
+- Read test files (`tests/test_parser.py`, `tests/test_scraper.py`) to understand expected behavior
+- Identify which test cases are failing and what they expect
+- Determine what exceptions should be raised vs. what is currently being raised
+
+**Step 1.2: Identify the Bug Location**
+- Analyze `src/parser.py` to find where JSON decoding is attempted
+- Examine how response content-type is currently (or not) validated
+- Understand what information is available in the response object
+
+**Step 1.3: Implement the Fix**
+- Modify only `src/parser.py` to handle non-JSON responses gracefully
+- Add content-type detection (from response headers or fallback heuristics for HTML/plain-text)
+- Ensure the parser raises `ValueError` (not `JSONDecodeError`) for non-JSON responses
+- Include clear, helpful error messages that mention both "json" and the actual content type
+- Preserve existing JSON parsing behavior for legitimate `application/json` responses
+
+**Step 1.4: Create Fixed Project Structure**
+Create `issue_project_fixed/` directory with the following structure:
+```
+issue_project_fixed/
+├── src/
+│   ├── __init__.py
+│   ├── models.py          (copy unchanged)
+│   ├── parser.py          (FIXED)
+│   └── scraper.py         (copy unchanged)
+├── tests/
+│   ├── __init__.py
+│   ├── test_parser.py     (copy unchanged)
+│   └── test_scraper.py    (copy unchanged)
+├── data/
+│   └── sample_responses.json  (copy unchanged)
+├── requirements.txt       (copy unchanged)
+├── README.md              (create/update)
+├── CHANGELOG.md           (create)
+└── conftest.py            (create if needed for imports)
+```
+
+**Step 1.5: Create Documentation**
+- `README.md`: Include project description, status (all tests passing ✅), installation, and test execution instructions
+- `CHANGELOG.md`: Document the bug, which files were modified, high-level fix description, and test results
+
+### Phase 2: Execute Full Validation
+
+**Step 2.1: Environment Setup**
+- Install all dependencies from `requirements.txt`
+- Verify Python environment is properly configured
+- Ensure all imports can be resolved
+
+**Step 2.2: Run Automated Test Suite**
+- Execute: `pytest tests/ -q` (or `pytest tests/ -v` for verbose output)
+- Expected result: **All 14 tests must pass**
+- Capture and verify exit code is 0 (success)
+
+**Step 2.3: Execute Runtime Verification**
+- Create and run a verification script that exercises:
+  - Valid JSON parsing functionality
+  - Scraper listing and product detail operations
+  - HTML error page handling (verify `ValueError` is raised with appropriate message)
+  - Plain-text response handling (verify `ValueError` is raised with appropriate message)
+- Capture all outputs and verify no unexpected exceptions occur
+
+**Step 2.4: Document Validation Results**
+- Record all test outputs and exit codes
+- Capture verification script results
+- Note any error traces or failures (should be none if fix is correct)
+- Verify behavior is consistent across all test scenarios
+
+## Output Specification
+
+**Deliverables:**
+
+1. Complete `issue_project_fixed/` directory structure with:
+   - Fixed `src/parser.py` with bug resolved
+   - All copied files in correct locations
+   - Updated `README.md`
+   - New `CHANGELOG.md`
+
+2. Test Execution Results:
+   - Output showing "14 passed" with 0 failures
+   - Exit code confirmation
+
+3. Runtime Validation Results:
+   - Outputs from verification script showing:
+     - Valid JSON successfully parsed
+     - Scraper operations working correctly
+     - Non-JSON responses raising `ValueError` with helpful messages
+     - No unexpected failures
+
+4. Final Summary Statement:
+   - Confirm that all 14 automated tests passed
+   - Confirm that runtime verification completed without errors
+   - Confirm that project meets expected functionality
+   - Confirm behavior is consistent across all test scenarios
+
+## Constraints & Preferences
+
+### Code Quality
+- Only modify `src/parser.py` in the fixed version
+- Do not modify any test files
+- Do not modify `models.py` or `scraper.py`
+- Use minimal, focused changes that solve only the identified bug
+- Ensure clear, helpful error messages for debugging
+
+### Validation Requirements
+- All 14 tests must pass with 0 failures
+- Parser must raise `ValueError` for non-JSON responses (not `JSONDecodeError`)
+- Valid JSON responses must parse correctly
+- Error messages must be clear and helpful to developers
+- Runtime verification must exercise both happy path and error scenarios
+
+### File Paths
+- Use relative paths (e.g., `src/parser.py`, not absolute paths)
+- Target workspace: `issue_project_fixed/` under the specified workspace directory
+
+## Quality Gates & Verification
+
+**Success Criteria (must all be met):**
+1. ✅ All 14 tests pass with exit code 0
+2. ✅ Parser raises `ValueError` (not `JSONDecodeError`) for non-JSON responses
+3. ✅ Error messages include helpful context (content-type, status code)
+4. ✅ Valid JSON responses continue to parse correctly
+5. ✅ Runtime verification script executes without errors
+6. ✅ All test scenarios produce consistent, expected results
+7. ✅ No unexpected exceptions or failures occur
+
+**Self-Check Before Completion:**
+- Have you analyzed and understood all failing tests?
+- Does the fix address the root cause (missing content-type validation)?
+- Are all 14 tests now passing?
+- Does the runtime verification confirm correct behavior?
+- Are documentation and changelog complete?
+- Is the delivery ready for immediate use?
+
+## Key Requirement
+
+Execute the full validation pipeline as described in Phase 2, capturing all outputs, logs, and verification results. Provide explicit confirmation that all test cases passed and that the project meets expected functionality under all test scenarios.
