@@ -1,0 +1,240 @@
+# Final Prompt: JSON Parser Bug Fix with Complete Project Validation
+
+## Role & Objective
+
+You are a senior software engineer responsible for fixing a critical JSON parsing bug in a Python web scraper project, creating a complete fixed project structure, and executing comprehensive validation to ensure the fix works correctly and meets all requirements.
+
+## Input & Context
+
+**Project Details:**
+- Buggy project source: `issue_project/` (contains 5 failing tests out of 14)
+- Target workspace: `<WORKSPACE>` directory (e.g., C:\BugBash\workSpace2)
+- Fixed project destination: `<WORKSPACE>/oswe-mini-m23a1s255-new/issue_project_fixed/`
+- Bug symptom: Parser crashes with `JSONDecodeError` when servers return HTML or plain text instead of JSON
+- Root cause: Response parser does not validate content-type before calling `json.loads()`
+
+## Step-by-Step Instructions
+
+### Phase 1: Create Fixed Project with Bug Resolution
+
+**Step 1.1: Analyze Bug and Test Expectations**
+- Read all test files in the buggy project to identify failing tests
+- Understand what exceptions the tests expect to be raised
+- Identify the specific parser method that crashes
+- Document the gap between current behavior and expected behavior
+
+**Step 1.2: Inspect Source Code**
+- Examine `src/parser.py` to locate where `json.loads()` is called
+- Identify missing content-type validation logic
+- Review response object structure (headers, content-type field, body)
+- Determine how to detect and handle non-JSON responses
+
+**Step 1.3: Fix the Parser Implementation**
+- Modify `src/parser.py` only (no other files)
+- Add content-type validation before `json.loads()` call:
+  - Check `response.headers['Content-Type']` for JSON indication (e.g., "application/json")
+  - Implement lightweight fallback heuristics for HTML/plain-text detection when headers are missing or ambiguous
+  - Raise `ValueError` (not `JSONDecodeError`) for non-JSON responses with clear, helpful messages
+  - Messages should mention both "json" and the actual content-type (e.g., "Expected JSON response, got text/html")
+  - Preserve existing `json.JSONDecodeError` for truly malformed JSON when content-type indicates JSON
+
+**Step 1.4: Create Fixed Project Structure**
+Build the fixed project at the specified workspace location with this exact structure:
+```
+<WORKSPACE>/oswe-mini-m23a1s255-new/issue_project_fixed/
+├── src/
+│   ├── __init__.py         (copied unchanged from original)
+│   ├── models.py           (copied unchanged from original)
+│   ├── parser.py           (FIXED - bug resolution)
+│   └── scraper.py          (copied unchanged from original)
+├── tests/
+│   ├── __init__.py         (copied unchanged from original)
+│   ├── test_parser.py      (copied unchanged from original)
+│   └── test_scraper.py     (copied unchanged from original)
+├── data/
+│   └── sample_responses.json  (copied unchanged from original)
+├── requirements.txt        (copied unchanged from original)
+├── README.md               (create - updated status)
+└── CHANGELOG.md            (create - document fix)
+```
+
+**Step 1.5: Copy Unmodified Files**
+From the original `issue_project/`, copy these files exactly as-is:
+- `src/__init__.py`
+- `src/models.py`
+- `src/scraper.py`
+- `tests/__init__.py`
+- `tests/test_parser.py`
+- `tests/test_scraper.py`
+- `data/sample_responses.json`
+- `requirements.txt`
+
+**Step 1.6: Create Documentation**
+- `README.md`: Include project description, **Status: All tests passing ✅**, installation instructions, test execution instructions, differences from buggy version
+- `CHANGELOG.md`: Document the bug discovered, files modified (parser.py only), high-level explanation of the fix, test results before/after
+
+### Phase 2: Execute Complete Project Validation
+
+**Step 2.1: Configure Python Environment**
+- Create or configure Python environment in the fixed project directory
+- Verify Python version compatibility
+- Ensure environment is isolated and clean
+
+**Step 2.2: Install Dependencies**
+- Install all packages from `requirements.txt`
+- Verify all packages install successfully
+- Confirm dependencies are available to project code
+
+**Step 2.3: Run Full Test Suite**
+- Execute: `pytest tests/ -v` from the fixed project root directory
+- Capture complete output including individual test results
+- Verify exit code is 0 (success)
+- Confirm result: **All 14 tests must pass**
+- Record test execution time
+
+**Step 2.4: Execute Runtime Validation Scenarios**
+Create and run validation code that exercises:
+- **Valid JSON parsing**: Parse legitimate JSON response with proper content-type
+- **HTML error response**: Simulate HTML response (content-type: text/html), verify `ValueError` is raised with clear message
+- **Plain text response**: Simulate plain text response (content-type: text/plain), verify `ValueError` is raised with clear message
+- **Malformed JSON with correct content-type**: Send malformed JSON with content-type "application/json", verify `json.JSONDecodeError` is still raised
+- **System launch verification**: Confirm all imports work and no initialization errors occur
+
+**Step 2.5: Capture and Document Results**
+- Record complete pytest output showing "X passed in Y.XXs"
+- Record exit codes for all commands (should be 0)
+- Capture runtime validation outputs demonstrating:
+  - Valid JSON successfully parsed
+  - Non-JSON responses raise appropriate exceptions
+  - Error messages are clear and helpful
+  - Behavior is consistent across scenarios
+- Note absence of crashes, stack traces, or unexpected failures
+
+**Step 2.6: Provide Final Validation Summary**
+Explicitly state:
+- "All 14 automated tests passed with exit code 0"
+- "System launches successfully without errors"
+- "Valid JSON responses parse correctly"
+- "Non-JSON responses raise ValueError with clear messages"
+- "Malformed JSON with correct content-type still raises JSONDecodeError"
+- "Project meets expected functionality"
+- "Behavior is consistent across all test scenarios"
+
+## Output Specification
+
+**Deliverables:**
+
+1. **Fixed Project Directory:**
+   - Complete `oswe-mini-m23a1s255-new/issue_project_fixed/` with proper directory hierarchy
+   - Fixed `src/parser.py` containing the bug resolution
+   - All copied files in correct locations, unchanged from originals
+   - `README.md` showing fixed status
+   - `CHANGELOG.md` documenting the fix
+
+2. **Test Execution Output:**
+   - Full pytest output: "14 passed in X.XXs"
+   - Exit code: 0
+   - Individual test result lines (if captured)
+   - Confirmation of zero failures
+
+3. **Runtime Validation Evidence:**
+   - System launch confirmation (no errors)
+   - Valid JSON parsing test output
+   - HTML error handling test output (showing `ValueError` raised)
+   - Plain text handling test output (showing `ValueError` raised)
+   - Malformed JSON test output (showing `JSONDecodeError` raised)
+   - Error message examples demonstrating clarity
+
+4. **Environment Information:**
+   - Python version used (e.g., 3.12.10)
+   - Virtual environment status
+   - Installed packages list with versions
+   - Project root directory path
+
+5. **Final Validation Report:**
+   - Summary of what was tested
+   - Explicit statement: "All 14 tests passed"
+   - Explicit statement: "Project meets expected functionality"
+   - Explicit statement: "System launches without errors"
+   - Explicit statement: "Behavior is consistent across test scenarios"
+   - Conclusion: Ready for deployment
+
+## Constraints & Preferences
+
+### Code Quality Standards
+- **Modification Scope**: ONLY `src/parser.py` may be modified; all other files must be exact copies
+- **Test Files**: Do NOT modify any test files
+- **Backward Compatibility**: Valid JSON parsing must work identically to original
+- **Error Messages**: Must be clear, developer-friendly, and include context (content-type, status code)
+- **Minimal Implementation**: Add only what is necessary to resolve the bug; no extraneous changes
+
+### Validation Requirements
+- **Test Coverage**: All 14 tests must pass with exit code 0 (no failures)
+- **Exception Behavior**:
+  - `ValueError` for all non-JSON responses (HTML, plain text, redirect pages, etc.)
+  - `json.JSONDecodeError` ONLY for malformed JSON with proper JSON content-type
+- **Environment Setup**: Use standard Python virtual environment setup
+- **Reproducibility**: All steps must produce consistent, repeatable results
+- **Runtime Testing**: Must exercise happy path, error scenarios, and edge cases
+
+### Documentation Standards
+- **README.md**: Updated to reflect fixed status, clear installation and execution instructions
+- **CHANGELOG.md**: Detailed record of bug, files modified, and before/after results
+- **File Paths**: Use relative paths in all documentation (e.g., `src/parser.py`)
+- **Clarity**: All documentation must be understandable to new team members
+
+## Quality Gates & Success Criteria
+
+**Mandatory Requirements:**
+- ✅ All 14 tests pass (exit code 0)
+- ✅ Parser raises `ValueError` for non-JSON responses
+- ✅ Error messages mention "json" + content-type
+- ✅ Valid JSON parsing unchanged from original
+- ✅ Runtime validation executes all scenarios successfully
+- ✅ No modifications outside `src/parser.py` (except docs)
+- ✅ System launches without errors
+- ✅ Complete documentation provided
+
+**Pre-Completion Verification:**
+1. Have all test expectations been analyzed?
+2. Is the parser fix minimal and focused?
+3. Do all 14 tests pass with exit code 0?
+4. Have runtime validation scenarios been executed?
+5. Are environment and dependencies properly configured?
+6. Is the fixed project ready for immediate deployment?
+
+## Critical Implementation Notes
+
+**Content-Type Validation Approach:**
+- Primary: Check `response.headers.get('Content-Type', '')` for JSON indicators
+- Fallback: If headers missing or ambiguous, analyze response body (check for `<html>`, `{`, etc.)
+- Non-JSON detection: Any response that is not valid JSON format should trigger validation
+
+**Error Message Standards:**
+Example formats that satisfy requirements:
+- "Expected JSON response, got text/html (status 200)"
+- "Expected JSON (application/json) but got text/plain"
+- "Content-Type mismatch: expected application/json, received text/html"
+
+**Test Verification:**
+- Run: `pytest tests/ -v` — must show "14 passed"
+- Run: Runtime scenarios exercise ResponseParser with valid/invalid inputs
+- Verify: No stack traces or unexpected exceptions
+- Confirm: Error messages are clear and helpful
+
+## Final Critical Requirements
+
+**Phase 2 Validation is MANDATORY:**
+- Do NOT stop after Phase 1 (fix implementation)
+- Phase 2 must be completed to verify fix is functional
+- ALL validation steps must be executed and documented
+- Explicit pass/fail statements required
+
+**Project must be deployment-ready:**
+- All tests passing
+- Environment configured and working
+- Documentation complete and accurate
+- Validation evidence captured
+- Ready for immediate use
+
+Execute both Phase 1 and Phase 2 completely. Provide explicit confirmation that all 14 tests passed, the system launches without errors, and the project meets expected functionality with consistent behavior across all test scenarios.

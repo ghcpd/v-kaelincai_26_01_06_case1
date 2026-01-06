@@ -1,0 +1,97 @@
+{
+  "description": "Sample API responses demonstrating various scenarios",
+  "scenarios": {
+    "valid_product_listing": {
+      "status_code": 200,
+      "content_type": "application/json",
+      "body": {
+        "products": [
+          {
+            "id": "PROD001",
+            "name": "Wireless Headphones Pro",
+            "url": "https://shop-a.com/products/headphones-pro",
+            "thumbnail": "https://shop-a.com/images/headphones.jpg"
+          },
+          {
+            "id": "PROD002",
+            "name": "Smart Watch Series 5",
+            "url": "https://shop-a.com/products/watch-s5",
+            "thumbnail": "https://shop-a.com/images/watch.jpg"
+          },
+          {
+            "id": "PROD003",
+            "name": "4K Action Camera",
+            "url": "https://shop-a.com/products/camera-4k",
+            "thumbnail": "https://shop-a.com/images/camera.jpg"
+          }
+        ],
+        "total": 3,
+        "page": 1,
+        "status": "success"
+      }
+    },
+    "valid_product_details": {
+      "status_code": 200,
+      "content_type": "application/json",
+      "body": {
+        "id": "PROD001",
+        "name": "Wireless Headphones Pro",
+        "url": "https://shop-a.com/products/headphones-pro",
+        "source": "shop-a",
+        "price": {
+          "current": "¥1,299.00",
+          "original": "¥1,799.00",
+          "currency": "CNY",
+          "discount_percent": 27.79
+        },
+        "in_stock": true,
+        "specs": {
+          "brand": "AudioTech",
+          "model": "AT-WH1000",
+          "color": "Midnight Black",
+          "battery_life": "30 hours",
+          "noise_cancellation": "Active"
+        },
+        "reviews": {
+          "average": 4.6,
+          "total": 2847,
+          "5star": 1823,
+          "4star": 789,
+          "3star": 156,
+          "2star": 45,
+          "1star": 34
+        },
+        "promotions": [
+          {
+            "title": "Spring Sale",
+            "description": "Save ¥500 on premium headphones",
+            "discount": 500.0,
+            "start_date": "2024-03-01",
+            "end_date": "2024-03-31"
+          }
+        ]
+      }
+    },
+    "html_error_page": {
+      "status_code": 200,
+      "content_type": "text/html",
+      "body": "<!DOCTYPE html>\n<html>\n<head><title>Internal Server Error</title></head>\n<body>\n  <h1>500 Internal Server Error</h1>\n  <p>An unexpected error occurred while processing your request.</p>\n  <p>Please contact support if the problem persists.</p>\n</body>\n</html>"
+    },
+    "session_expired_redirect": {
+      "status_code": 200,
+      "content_type": "text/html",
+      "body": "<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv=\"refresh\" content=\"0;url=/login\">\n  <title>Session Expired</title>\n</head>\n<body>\n  <p>Your session has expired. Please log in again.</p>\n  <p>Redirecting to login page...</p>\n</body>\n</html>"
+    },
+    "rate_limit_error": {
+      "status_code": 429,
+      "content_type": "text/plain",
+      "body": "Rate limit exceeded. Please try again in 60 seconds."
+    },
+    "maintenance_page": {
+      "status_code": 503,
+      "content_type": "text/html",
+      "body": "<!DOCTYPE html>\n<html>\n<head><title>Maintenance</title></head>\n<body>\n  <h1>Site Under Maintenance</h1>\n  <p>We'll be back soon!</p>\n</body>\n</html>"
+    }
+  },
+  "notes": "These samples demonstrate the various response types that the scraper may encounter, including problematic non-JSON responses that trigger the bug."
+}
